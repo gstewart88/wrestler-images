@@ -21,9 +21,6 @@ fs.readdirSync(inputDir).forEach(async (file) => {
 
   try {
     await sharp(inputPath)
-      .resize(300, 300, {
-        fit: 'cover'
-      })
       .webp({ quality: 75 })
       .toFile(outputPath);
 
