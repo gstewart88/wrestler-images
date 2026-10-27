@@ -1,31 +1,14 @@
 const sharp = require('sharp');
 const fs = require('fs');
-const path = require('path');
 
-const inputDir = './images';
-const outputDir = './thumbs';
-
-if (!fs.existsSync(outputDir)) {
-  fs.mkdirSync(outputDir);
+if (!fs.existsSync('./thumbs')) {
+  fs.mkdirSync('./thumbs');
 }
 
-fs.readdirSync(inputDir).forEach(async (file) => {
-  const inputPath = path.join(inputDir, file);
+fs.readdirSync('./images').forEach(async file => {
+  if (!file.match(/\.(png|jpg|jpeg)$/i)) return;
 
-  if (!/\.(png|jpg|jpeg)$/i.test(file)) return;
-
-  const outputFile =
-    path.parse(file).name + '.webp';
-
-  const outputPath = path.join(outputDir, outputFile);
-
-  try {
-    await sharp(inputPath)
-      .webp({ quality: 75 })
-      .toFile(outputPath);
-
-    console.log(`Created ${outputFile}`);
-  } catch (err) {
-    console.error(`Failed ${file}`, err);
-  }
+  await sharp(`./images/${file}`)
+    .webp({ quality: 80 })
+    .toFile(`./thumbs/${file.replace(/\.[^.]+$/, '.webp')}`);
 });
